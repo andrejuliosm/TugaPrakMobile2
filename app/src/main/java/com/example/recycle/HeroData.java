@@ -25,14 +25,14 @@ public class HeroData {
     };
 
     public static ArrayList<heromodel> getListData() {
-        heromodel HeroModel = null;
+
         ArrayList<heromodel> list = new ArrayList<>();
         for (int i = 0; i <title.length;i++){
-            HeroModel = new heromodel();
-            HeroModel.setGambarHero(thumbnail[i]);
-            HeroModel.setNamaHero(title[i]);
-            HeroModel.setDescHero(heroDetails[i]);
-            list.add(HeroModel);
+            heromodel hero = new heromodel();
+            hero.setGambarHero(thumbnail[i]);
+            hero.setNamaHero(title[i]);
+            hero.setDescHero(heroDetails[i]);
+            list.add(hero);
 
         }
         return list;

@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,5 +33,15 @@ private ArrayList<heromodel> listHero = new ArrayList<>();
         HeroAdapter heroAdapter = new HeroAdapter(this);
         heroAdapter.setHeromodels(listHero);
         rvHero.setAdapter(heroAdapter);
+
+        heroAdapter.setOnItemClickCallback(new HeroAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(heromodel hero) {
+                Toast.makeText(MainActivity.this, "Memilih " + hero.getNamaHero(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ItemView.class);
+                intent.putExtra(ItemView.EXTRA_DATA, (Parcelable) hero);
+                startActivity(intent);
+            }
+        });
     }
 }

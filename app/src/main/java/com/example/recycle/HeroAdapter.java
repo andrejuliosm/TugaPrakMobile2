@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ListViewHolder> {
     private Context context;
     private ArrayList<heromodel> heromodels;
+    private OnItemClickCallback onItemClickCallback;
 
 
     public  HeroAdapter(Context context) {
@@ -31,21 +32,32 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ListViewHolder
     public void setHeromodels(ArrayList<heromodel>heromodels){
         this.heromodels = heromodels;
     }
+    public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback;
+    }
 
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemRow = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hero_details,viewGroup,false);
+        View itemRow = LayoutInflater.from(viewGroup.getContext()).
+                inflate(R.layout.item_hero,viewGroup,false);
         return new ListViewHolder(itemRow);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HeroAdapter.ListViewHolder holder, int i) {
-        Glide.with(context)
-                .load(getHeromodels()
-                .get(i).getGambarHero())
+    public void onBindViewHolder(@NonNull final HeroAdapter.ListViewHolder holder, int i) {
+        heromodel hero = heromodels.get(i);
+        Glide.with(holder.itemView.getContext())
+                .load(hero.getGambarHero())
+                .apply(new RequestOptions().override(300, 300))
                 .into(holder.ivGambarHero);
         holder.tvNamaHero.setText(getHeromodels().get(i).getNamaHero());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickCallback.onItemClicked(heromodels.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -59,8 +71,11 @@ public class HeroAdapter extends RecyclerView.Adapter<HeroAdapter.ListViewHolder
 
         public ListViewHolder (@NonNull View itemView){
             super(itemView);
-            ivGambarHero = itemView.findViewById(R.id.gambar_hero);
-            tvNamaHero = itemView.findViewById(R.id.nama_hero);
+            ivGambarHero = itemView.findViewById(R.id.hero_image);
+            tvNamaHero = itemView.findViewById(R.id.hero_name);
         }
+    }
+    public interface OnItemClickCallback {
+        void onItemClicked(heromodel hero);
     }
 }
